@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html >
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" href="resources/css/inputcss.css" />
+        <link rel="stylesheet" href="resources/css/inputModalDialog.css" />
+        
+        <link rel="stylesheet" href="resources/css/jquery-ui.css"/>
+        <script src="resources/js/jquery-1.10.2.js"></script>
+        <script src="resources/js/jquery-ui.js"></script>
+        
+        <link rel="stylesheet" href="/resources/demos/style.css"/>
+        <script>
+            $(function() {
+                $("#datepicker").datepicker();
+            });
+        </script>
+        
+       
+    </head>
+    <body>
+
+
+
+
+        <form enctype="multipart/form-data" method="post">    
+            <div class="theme">
+                <div  class="theme_t"  >
+                    <input type="text"  placeholder="Введите тему заметки..."/>
+                </div>
+                <div class="theme_t1">
+                    Срок исполнения: <input type="text" id="datepicker"/>
+                </div>
+
+                 <div  class="theme_t1"  >
+                    <textarea name="text"  >Введите текст заметки...
+                    </textarea>
+                </div> 
+                
+                
+                
+                <div class="theme_t1">
+                    <input type="file" value=""></input>
+                </div>
+                <div class="theme_t1">
+                    <a href="#openSearch" >Добавить исполнителеей...</a>
+
+                </div> 
+               
+                <div class="form-recover1"><a href="masseger.html">Добавить</a></div>
+
+            </div>
+
+            
+
+
+
+
+        </form> 
+
+
+
+        <div id="openSearch" class="modalDialog" >
+
+            <form class="form-container" method="get" action="/search" id="search">
+                <a href="#close" title="Закрыть" class="close">X</a> 
+                <input name="q" type="text" size="40" placeholder="Поиск..." />
+
+                <div class="zebradiv">
+                    <table class="zebra">
+
+
+                        <caption>Результат поиска: </caption>
+                        <thead>
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Предприятие</th>
+
+                            </tr>
+                        </thead>
+                        <tbody  >
+
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>10:00</td>
+
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>12:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>15:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>17:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>21:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>10:00</td>
+
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>12:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>15:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>17:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>21:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>10:00</td>
+
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>12:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>15:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>17:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>21:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>10:00</td>
+
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>12:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>15:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>17:00</td>
+                            </tr>
+                            <tr>
+                                <td>02.06.2010</td>
+                                <td>21:00</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table> 
+                </div>
+            </form>
+            <form class="form-container">
+                <p class="addPerson">Выбранные пользователи:</p>
+                <div class="addPersondiv">
+                    <p class="addPerson">dnvlkndvd; dvdsvsdvd; dsvsvdsv; sdvsdv;fg
+                        fg
+                        fgfg
+                        fg
+                        fg
+                        fg
+                        fggfgfgfgfgf
+                        fgf
+                        gfg
+                        fg
+                        fg
+                        f
+                        gf
+                        g
+                        f
+                        g
+                        fg
+                        f
+                        g
+                        f
+                        g
+                        f
+                        g
+                        fg
+
+                        fg
+                        ffffffffffffffffffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffff
+                        fffffffffffffffffffffffffffffffffffffffffff
+                        ffffffffffffffffffffffffffff</p></div>
+                <div  class="checkbox"  >
+                    <input type="checkbox" /> Открыть просмотр для всех
+                </div>  
+                <div class="form-recover"><a href="#">Добавить</a></div>
+                
+            </form> 
+        </div>
+
+    </body>
+</html>

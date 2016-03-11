@@ -1,0 +1,177 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.director;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.convert.IConverter;
+import rzd.vivc.ideax.logic.service.SaveErrorInfo;
+import rzd.vivc.ideax.logic.service.StringListWithCommaSeparatedView;
+import rzd.vivc.ideax.logic.service.Upload;
+import rzd.vivc.ideax.model.entity.Idea;
+import rzd.vivc.ideax.model.pageobjeсt.UserInfoForList;
+import rzd.vivc.ideax.model.repository.IdeaRepository;
+import rzd.vivc.ideax.model.repository.UserRepository;
+import rzd.vivc.ideax.wicket.basepage.ProtectedPage;
+import rzd.vivc.ideax.wicket.converter.CustomDateConverter;
+import rzd.vivc.ideax.wicket.pages.forall.Messenger;
+import rzd.vivc.ideax.wicket.panels.UserChoisePanel;
+
+/**
+ * Страница для ввода и редактирования заметок
+ *
+ * @author vvolgina
+ */
+public class Input extends ProtectedPage {
+
+    //модель для загрузки данных по идее
+    private class LoadableIdeaModel extends LoadableDetachableModel<Idea> {
+
+        private long id;
+        private transient Idea idea;
+
+        public LoadableIdeaModel(Idea idea) {
+            super(idea);
+            this.id = idea.getId();
+        }
+
+        public LoadableIdeaModel(long id) {
+            this.id = id;
+        }
+
+        @Override
+        protected Idea load() {
+            if (id == 0) {
+                return new Idea();
+            }
+            return new IdeaRepository().get(id);
+        }
+    }
+
+    //модель для загрузки Имен пользователей, назначенных на рецензирование данной идеи
+    private class LoadableUserNamesModel extends LoadableDetachableModel<StringListWithCommaSeparatedView> {
+
+        private long idIdea = 0;
+        private transient StringListWithCommaSeparatedView usersL;
+
+        public LoadableUserNamesModel(StringListWithCommaSeparatedView usersI) {
+            super(usersI);
+        }
+
+        public LoadableUserNamesModel(long idIdea) {
+            this.idIdea = idIdea;
+        }
+
+        public LoadableUserNamesModel() {
+        }
+
+        @Override
+        protected StringListWithCommaSeparatedView load() {
+            StringListWithCommaSeparatedView list;
+            if (idIdea == 0) {
+                list = new StringListWithCommaSeparatedView(new ArrayList<String>());
+            } else {
+                list = new UserRepository().getUsersForIdea(idIdea);
+            }
+            list.addList(selectedUsers);
+            return list;
+        }
+    }
+    //id редактируемой идеи. если 0, то идея новая
+    private long id = 0;
+    //редактируемая идея
+    private LoadableIdeaModel ideaModel;
+    //список пользователей, назначенных на рецензирование данной идеи
+    private LoadableUserNamesModel userNames;
+    //пользователи, выбранные для отклика на идею
+    private List<UserInfoForList> selectedUsers = new ArrayList<>();
+    //прикрепляемый к идее файл
+    FileUploadField fileUpload;
+    private UserChoisePanel usersPanel;
+
+    public Input(PageParameters param) {
+        //извлекаем Id идеи И ее загрузка
+        id = param.get("id").toLong(0);
+        ideaModel = new LoadableIdeaModel(id);
+        userNames = new LoadableUserNamesModel(id);
+
+        //форма с вводом заметки
+        Form form;
+        form = new Form("finput") {
+            @Override
+            public final void onSubmit() {
+                Idea idea = (Idea) ideaModel.getObject();
+                idea.setUserCreatorID(getUserSession().getUser().getId());
+                idea.setAccess((byte) (usersPanel.isAllowAll() ? 1 : 0));
+                idea.setDt_begin(idea.getDt_create());
+
+                //загрузка файла
+                final FileUpload uploadedFile = fileUpload.getFileUpload();
+                try {
+                    String fileName = new Upload().doUpload(uploadedFile);
+                    if (!fileName.isEmpty()) {
+                        idea.setFileName(fileName);
+                    }
+                    ///TODO вместо добавит пользвателей должен быть список этих пользователей
+                } catch (IllegalStateException e) {
+                    new SaveErrorInfo().save(e);
+                    error(e.getMessage());
+                }
+
+                //сохранение заметки в БД
+                try {
+                    new IdeaRepository().saveIdeaUserInfoList(idea, selectedUsers);
+                    setResponsePage(Messenger.class);
+                } catch (Exception e) {
+                    new SaveErrorInfo().save(e);
+                    error("Ошибка связи с БД" + e.getMessage());
+                }
+            }
+        };
+        add(form);
+        //поkе для обратной связи о результатах сохранения заметки
+        form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
+        //тема заметки
+        form.add(
+                new TextField("theme", new PropertyModel(ideaModel, "theme")).setRequired(true));
+        //дата до которой выполнить
+        form.add(
+                new TextField("date", new PropertyModel(ideaModel, "dt_end"), Date.class) {
+            @Override
+            public IConverter getConverter(Class type) {
+                return new CustomDateConverter();
+            }
+        });
+        //текст заметки
+        form.add(
+                new TextArea("text", new PropertyModel(ideaModel, "text")).setRequired(true));
+        //Загрузка файла
+        form.setMultiPart(true);
+        form.add(fileUpload = new FileUploadField("fileUpload"));
+        //список пользователей
+        MultiLineLabel multiLineLabel = new MultiLineLabel("alreadyAddedUsers", new PropertyModel<String>(userNames, "commaSeparatedValues"));
+        multiLineLabel.setOutputMarkupId(true);
+        form.add(multiLineLabel);
+        //Окно добавления пользователей
+        usersPanel = new UserChoisePanel("usersPanel", multiLineLabel);
+        //привязка данных из панели к информации со страницы
+        selectedUsers = usersPanel.getSelectedUsers();
+        usersPanel.setAllowAll(new IdeaRepository().get(id).getAccess()==0?false:true);
+        add(usersPanel);
+    }
+}

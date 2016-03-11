@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" href="resources/css/recenziacss.css" />
+        <link rel="stylesheet" href="resources/css/inputModalDialog.css" />
+    </head>
+    <body>
+        <div  class="rec"  >
+            Рецензия
+        </div> 
+        <div  class="rec1"  >
+            <wicket:link>
+                <a  href="Messenger.html">Отмена</a>
+            </wicket:link>
+        </div>
+
+        <div  class="rec2"  >
+            <strong wicket:id="theme">Тема предложения</strong>
+            <div class="imgholder" wicket:id="text">
+                Текст предложения
+            </div>
+            <div class="file">
+                <a wicket:id="download">Прикрепленный файл</a>	
+            </div>
+            <div class="meta" wicket:id="data">срок исполнения 24.02.2014</div>
+            <div>
+                <div wicket:id="comment">
+                    <strong></strong>
+                    <div class="imgholder" >
+                        <p wicket:id="fio">ФИО принявщего решение:</p>
+                        <p wicket:id="commentText">Текст рецензии..</p>
+                    </div>
+                    <div class="meta" wicket:id="commentDate">24.02.2014</div>
+                    <div class="file">
+                        <a wicket:id="downloadCommentLink">Прикрепленный файл</a>	
+                    </div>
+                </div>
+            </div>
+            <wicket:remove>
+                <strong></strong>
+                <div class="imgholder"><p>ФИО принявщего решение:</p>Текст рецензии..</div>
+                <div class="meta">24.02.2014</div>
+                <strong></strong>
+                <div class="imgholder"><p>ФИО принявщего решение:</p>Текст рецензии..</div>
+                <div class="meta">24.02.2014</div>
+            </wicket:remove>
+        </div> 
+
+
+
+        <form wicket:id="newComment">
+            <div  class="rec2"  >
+                <textarea name="text"  wicket:id="newText">Введите текст заметки...
+                </textarea>
+            </div>
+
+            <div class="theme_t1">
+                <input type="file" wicket:id="fileUpload" ></input>
+            </div>
+
+            <div class="rec5">
+                <a class="a1" href="#" wicket:id="yes">Принять</a>
+                <a class="a2" href="#" wicket:id="no">Отклонить</a>
+                <a class="a3" href="#" wicket:id="arch">Архив</a>
+            </div>
+
+        </form>
+
+    </body>
+</html>

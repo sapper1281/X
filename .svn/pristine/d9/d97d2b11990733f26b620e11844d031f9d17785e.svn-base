@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+        <wicket:panel  >
+           
+         
+
+            <form class="form-container"  method="get" action="/search" id="search" wicket:id="fsearch">
+                <a href="#close" title="Закрыть" class="close">X</a>
+                <input wicket:id="isearch" name="q" type="text" size="40" placeholder="Поиск..." />
+                <a href="#" wicket:id="dosearch">Поиск</a>
+
+
+                <div class="zebradiv" wicket:id="search">
+                    <table class="zebra" >
+                        <caption>Результат поиска: </caption>
+                        <thead>
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Предприятие</th>
+                            </tr>
+                        </thead>
+                        <tbody  >
+
+                            <tr wicket:id="users">
+                                <td ><a href="#" wicket:id="fiolink"><span wicket:id="fio"></span></a></td>
+                                <td wicket:id="department">10:00</td>
+
+                            </tr>
+                           
+                        </tbody>
+
+                    </table> 
+                </div>
+
+                <p class="addPerson">Выбранные пользователи:</p>
+                <div class="addPersondiv" wicket:id="selected">
+                    <p class="addPerson" wicket:id="selectedusers">
+                        <span wicket:id="selecteduser"></span>
+                       
+                    </p></div>
+                <div  class="checkbox"  >
+                    <input type="checkbox" wicket:id="allowall"/> Открыть просмотр для всех
+                </div>  
+                <div class="form-recover"><a href="#">Добавить</a></div>
+            </form>
+        
+        </wicket:panel>
+  

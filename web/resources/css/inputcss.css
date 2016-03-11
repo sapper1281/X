@@ -1,0 +1,263 @@
+/* 
+    Document   : inputcss
+    Created on : 18.06.2014, 14:37:08
+    Author     : apopovkin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+    .theme{
+     color:#c98787;
+      width: 100%;
+      overflow:hidden;
+    }
+    /*@media screen and (max-width : 2000px) {*/
+    .theme_t  {
+        margin-left: 20px;
+        float:left;
+    }
+    .theme_t1  {margin-left: 20px;
+                color: #bebebe;
+        font-size: 14px;
+        
+    }
+     .theme_t2  {margin-left: 20px;
+                color: #bebebe;
+        font-size: 14px;
+        float: left;
+    }
+    
+    
+    .theme_t3  {margin-left: 20px;
+                text-align: right;
+    }
+   .theme_t3 a{ 
+    color:#bebebe;
+    font-size: 18px;
+    padding-right: 5%;
+     
+   
+}
+
+
+ /*   @media screen and (max-width : 200px) {
+    .theme_t  {margin-left: 20px;
+    }
+    .theme_t1  {margin-left: 20px;
+                color: #bebebe;
+        font-size: 14px;
+    }
+   
+    }*/
+     #datepicker {
+    border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: darkred ;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;
+    width:200px;   
+
+
+}
+    
+    .theme_t1:hover{
+    color: #555;
+    font-size: 14px;
+ } 
+    .theme_t input {
+
+    border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: darkred ;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;margin-right:  20px;
+    width:300px;
+}
+
+.theme_t1  textarea{
+   
+    border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: #828282;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;
+    width:95%;
+    height: 200px;
+}    
+
+
+.theme_t1 span a{
+    margin-top: 15px;
+    font-size: 14px;
+    text-decoration:none; 
+    color:#c98787; 
+
+}
+
+
+    .theme_t1  a{
+    margin-top: 15px;
+    font-size: 14px;
+    text-decoration:none; 
+    color:#c98787; 
+
+}
+.form-recover1  a {
+     border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: darkred ;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:3px;color:#828282;
+    margin-bottom:2px;margin-right:  20px;
+     float: right;text-decoration:none;   
+} 
+.form-recover1  a:hover {
+     border: 2px solid #c9b7a2;
+    background: #d1d1d1;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: darkred ;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:3px;color:#828282;
+    margin-bottom:2px;margin-right:  20px;
+     float: right;  text-decoration:none; 
+} 
+
+
+    
+/*
+@media screen and (max-width : 200px) {
+
+    .theme{
+        color:#c98787;
+        width: 100%;
+    }
+    .theme_t  {
+        clear:right;
+         float:left;
+        width:100%;   
+
+    }}*/
+/*
+
+
+
+     
+.theme_t2  textarea{
+    margin-left: 30px;
+    border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: #828282;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;
+    width:95%;
+    height: 200px;
+}    
+
+
+
+
+.theme_t1 p{
+    color: #bebebe;
+    margin-top: 2px;
+    text-align: left;
+    font-size: 14px;
+    margin-left: 30px;
+
+} 
+.theme_t1 p:hover{
+    color: #555;
+    margin-top: 2px;
+    text-align: left;
+    font-size: 14px;
+    margin-left: 30px;
+
+} 
+#datepicker {
+    border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: darkred ;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;
+    width:50%;   
+
+
+}
+
+
+
+.theme_t1 input[type="file"]{ 
+    margin-top: 2px;
+    color: #c98787;
+    margin-left: 30px;
+    opacity:0.9;
+    width:267px;}*/
+
+.submit-container {
+   margin:3px 0;
+   text-align:right;
+   }
+.submit-button {
+    width: 100px;
+    height: 30px;
+   border: 1px solid #8c8c8c;
+   background: #858585;
+   background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#858585));
+   background: -webkit-linear-gradient(top, #ffffff, #858585);
+   background: -moz-linear-gradient(top, #ffffff, #858585);
+   background: -ms-linear-gradient(top, #ffffff, #858585);
+   background: -o-linear-gradient(top, #ffffff, #858585);
+   background-image: -ms-linear-gradient(top, #ffffff 0%, #858585 100%);
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   -webkit-box-shadow: rgba(000,000,000,0.5) 1px 1px 1px, inset rgba(000,000,000,0.5) 0 0 0;
+   -moz-box-shadow: rgba(000,000,000,0.5) 1px 1px 1px, inset rgba(000,000,000,0.5) 0 0 0;
+   box-shadow: rgba(000,000,000,0.5) 1px 1px 1px, inset rgba(000,000,000,0.5) 0 0 0;
+   text-shadow: #bfe4eb 0 1px 0;
+   color: #c44848;
+   font-family: helvetica, serif;
+   padding: 3px 5px;
+   font-size: 14px;
+   text-shadow: #000000 0 1px 0;
+   text-decoration: none;
+   vertical-align: middle;
+   }

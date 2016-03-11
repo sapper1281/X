@@ -1,0 +1,146 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.panels;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
+import rzd.vivc.ideax.model.pageobjeсt.UserInfoForList;
+import rzd.vivc.ideax.model.repository.UserRepository;
+
+/**
+ *
+ * @author vvolgina
+ */
+public final class UserChoisePanel extends Panel {
+     //модель для загрузки списка пользователей
+    private class LoadableUsersModel extends LoadableDetachableModel<List<UserInfoForList>> {
+
+        private String search = "";
+        private transient List<UserInfoForList> usersL;
+
+        public LoadableUsersModel(List<UserInfoForList> usersI) {
+            super(usersI);
+        }
+
+        public LoadableUsersModel(String search) {
+            this.search = search;
+        }
+
+        public LoadableUsersModel() {
+        }
+
+        public void setSearch(String search) {
+            this.search = search;
+        }
+
+        @Override
+        protected List<UserInfoForList> load() {
+            if (search.isEmpty()) {
+                return new UserRepository().getUserInfo();
+            }
+            return new UserRepository().getFilteredUserInfo(search);
+        }
+    }
+    
+    //общий список пользователей
+    private LoadableUsersModel users = new LoadableUsersModel();
+    //пользователи, выбранные для отклика на идею
+    private List<UserInfoForList> selectedUsers = new ArrayList<>();
+    //запрос для сортировки пользователей
+    private String isearch;
+     //флаг разрешения на общий доступ к идеям
+    private boolean allowAll = false;
+
+    /**
+     * Подучить список выбранных пользователй
+     * @return список выбранных пользователй
+     */
+    public List<UserInfoForList> getSelectedUsers() {
+        return selectedUsers;
+    }
+
+    /**
+     * Проставлена ли галочка на допуск всех пользвателй к просмотру илдеи
+     * @return
+     */
+    public boolean isAllowAll() {
+        return allowAll;
+    } 
+    
+
+    public UserChoisePanel(String id) {
+        super(id);
+         //Окно добавления пользователей
+        final Form fsearch = new Form("fsearch");
+        add(fsearch);
+        //часть страницы с отсортированным списком пользователей
+        final WebMarkupContainer searchPart = new WebMarkupContainer("search");
+        //поле для поиска
+        final TextField inputSearch = new TextField("isearch", new PropertyModel(this, "isearch"));
+        inputSearch.setOutputMarkupId(true);
+        fsearch.add(inputSearch);
+        //при нажатии будеи осущствлен поиск
+        fsearch.add(new AjaxSubmitLink("dosearch") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget art, Form form) {
+                super.onSubmit(art, form);
+                Object modelObject = inputSearch.getModelObject();
+                users.setSearch((String) modelObject);
+                art.add(searchPart);
+            }
+        });
+        fsearch.add(searchPart);
+        searchPart.setOutputMarkupId(true);
+        //собственно общий список пользователей
+        ListView lv1;
+        //список выбранных пользователей
+        final WebMarkupContainer selected = new WebMarkupContainer("selected");
+        //собственно общий список пользователей
+        lv1 = new ListView("users", users) {
+            @Override
+            protected void populateItem(ListItem li) {
+                final UserInfoForList usr = (UserInfoForList) li.getModelObject();
+                li.add(new AjaxFallbackLink("fiolink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget art) {
+                        if (!selectedUsers.contains(usr)) {
+                            selectedUsers.add(usr);
+                            art.add(selected);
+                        }
+                    }
+                }.add(new Label("fio", usr.getFIO())));
+                li.add(new Label("department", ((UserInfoForList) li.getModelObject()).getDeartmentName()));
+            }
+        };
+        searchPart.add(lv1);
+        selected.setOutputMarkupId(true);
+        fsearch.add(selected);
+        //список выбранных пользователей
+        ListView lv2 = new ListView("selectedusers", selectedUsers) {
+            @Override
+            protected void populateItem(ListItem li) {
+                li.add(new Label("selecteduser", ((UserInfoForList) li.getModelObject()).getFIO()));
+            }
+        };
+        selected.add(lv2);
+        //гадочка для открытия общего доступа
+        fsearch.add(new CheckBox("allowall", new PropertyModel(this, "allowAll")));
+    }
+
+    
+}

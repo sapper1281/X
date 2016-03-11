@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" href="resources/css/logincss.css" />
+    </head>
+    <body>
+        <a href="#openLogin">Войти</a>
+
+
+
+        <div id="openLogin" class="modalDialog">
+
+            <form wicket:id="logform" class="form-container" method="post" action="input.html">
+                <a href="#close" title="Закрыть" class="close">X</a> 
+                <div class="form-title">
+                    <h2>Авторизация</h2>
+                </div>
+                <div class="form-title">
+                    Логин
+                </div>
+                <input wicket:id="login" class="form-field" type="text" name="firstname" />
+                <br />
+                <div class="form-title">
+                    Пароль
+                </div>
+                <div class="form-recover">
+                    <a href="#openRecover" >Забыли пароль?</a>
+                </div>
+                <input wicket:id="password" class="form-field" type="password" name="email" />
+                <br />
+                <div class="submit-container">
+                    <input  class="submit-button" type="submit"  value="Вход" />
+                </div>
+            </form>
+            
+        </div>
+
+
+        <div id="openRecover" class="modalDialog"> 
+
+            <form wicket:id="fmail" class="form-container-recover" method="post" >
+                <a href="#close" title="Закрыть" class="close">X</a>
+                <div wicket:id="feedback"></div>
+                <div class="form-title">
+                    <h2>Восстановление пароля</h2>
+                </div>
+                <div class="form-title">e-mail:</div>
+                <input wicket:id="imail" class="form-field" type="text" name="email" />
+                <br />
+                <div class="submit-container">
+                    <input  class="submit-button" type="submit" value="Отправить" />
+                </div>
+            </form>     
+
+        </div>    
+
+
+
+
+
+
+
+    </body>
+</html>

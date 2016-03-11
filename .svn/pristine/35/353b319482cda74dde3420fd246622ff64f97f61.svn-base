@@ -1,0 +1,39 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package rzd.vivc.ideax.model.repository;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import rzd.vivc.ideax.model.configuration.SessionFactorySingleton;
+import rzd.vivc.ideax.model.entity.User;
+
+/**
+ * Репозиторий для пользователя
+ * @author VVolgina
+ */
+public final class UserRepository extends BaseRepository<User>{
+
+    /**
+     * Извлекает из БД пароль пользователя по его email.
+     * @param email email
+     * @return Пароль. Если пользователь с таким email не найден - вернет null
+     * @throws HibernateException ошибка связи с БД
+     */
+    public String getPasswordByEmail(String email) throws HibernateException{
+         Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        String bd = (String)sess.createQuery("SELECT l.password FROM LoginInfo as l where l.user.email=:mail").setString("mail", email).uniqueResult();
+
+        t.commit();
+        sess.close();
+        
+        return bd;
+    }
+}

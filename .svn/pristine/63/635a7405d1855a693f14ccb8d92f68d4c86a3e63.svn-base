@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html >
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" href="resources/css/inputcss.css" />
+        <link rel="stylesheet" href="resources/css/inputModalDialog.css" />
+
+        <link rel="stylesheet" href="resources/css/jquery-ui.css"/>
+        <script src="resources/js/jquery-1.10.2.js"></script>
+        <script src="resources/js/jquery-ui.js"></script>
+
+        <link rel="stylesheet" href="/resources/demos/style.css"/>
+        <script>
+            $(function() {
+                $("#datepicker").datepicker();
+            });
+        </script>
+
+
+    </head>
+    <body>
+
+        <form enctype="multipart/form-data" method="post" wicket:id="finput" action="input.html">  
+            <div wicket:id="feedback"></div>
+            <div class="theme">
+                <div  class="theme_t"  >
+                    <input type="text" wicket:id="theme" placeholder="Введите тему заметки..."/>
+                </div>
+                <div class="theme_t1">
+                    Срок исполнения: 
+                    <input wicket:id="date" type="text" id="datepicker"/>
+                </div>
+            </div>
+
+            <div  class="theme_t1"  >
+                <textarea name="text" wicket:id="text">Введите текст заметки...
+                </textarea>
+            </div> 
+
+            <div class="theme_t1">
+                <input type="file" wicket:id="fileUpload" ></input>
+            </div>
+
+            <div class="theme_t1">
+                <a href="#openSearch">Добавить исполнителеей...</a>
+            </div>     
+            <div class="form-recover1">
+                <input type="submit" value="Добавить"/>
+            </div>
+            <wicket:link>
+                <a  href="Messenger.html">Отмена</a>
+            </wicket:link>
+        </form> 
+
+
+        <div id="openSearch" class="modalDialog"  wicket:id="usersPanel"> 
+
+        </div>
+
+    </body>
+</html>

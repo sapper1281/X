@@ -1,0 +1,61 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.model.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import rzd.vivc.ideax.model.entity.State;
+import rzd.vivc.ideax.model.pageobjeсt.StateInfoWithIdeaCount;
+
+/**
+ * Репозиторий для состояний
+ * @author apopovkin
+ */
+public class StateRepository extends BaseRepository<State>{
+    /**
+     * Извлекает информацию о состоянии с к-вом идей в нем. Если нет ни одной идеи, то состояние не возвращается
+     * @return информацию о состоянии с к-вом идей в нем
+     * @throws HibernateException
+     */
+    public List<StateInfoWithIdeaCount> getStatesForDropDown() throws HibernateException{
+        List<StateInfoWithIdeaCount> res;
+        Session sess=getSession();
+        res=getStatesForDropDown(sess);
+        sess.close();
+        return res;
+    }
+    
+    /**
+     * Извлекает информацию о состоянии с к-вом идей в нем. Если нет ни одной идеи, то состояние не возвращается
+     * @return информацию о состоянии с к-вом идей в нем
+     * @throws HibernateException
+     */
+    protected List<StateInfoWithIdeaCount> getStatesForDropDown(Session sess) throws HibernateException{
+        return (ArrayList<StateInfoWithIdeaCount>) sess.createQuery("select new rzd.vivc.ideax.model.pageobjeсt.StateInfoWithIdeaCount(s.name, SIZE(s.ideas), s.id) from State as s where s.deleted=0 group by s").list();
+    }
+    
+    /**
+     * Найти состояние по его названию
+     * @param name название
+     * @return состояние
+     */
+    public State getStateByName(String name){
+        Session session=getSession();
+        State st=(State)session.createQuery("SELECT s FROM State AS s WHERE s.name=:name").setString("name", name).uniqueResult();
+        closeSession(session);
+        return st;
+    }
+    
+    public static void main(String[] args){
+        StateRepository rep=new StateRepository();
+        List<StateInfoWithIdeaCount> statesForDropDown = rep.getStatesForDropDown();
+        for (StateInfoWithIdeaCount stateInfoWithIdeaCount : statesForDropDown) {
+            System.out.println(stateInfoWithIdeaCount);
+        }
+        
+    }
+}

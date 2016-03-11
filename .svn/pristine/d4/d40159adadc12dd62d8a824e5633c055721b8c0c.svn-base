@@ -1,0 +1,109 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.pages.forall;
+
+import java.util.Iterator;
+import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RefreshingView;
+import org.apache.wicket.markup.repeater.util.ModelIteratorAdapter;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import rzd.vivc.ideax.model.entity.Idea;
+import rzd.vivc.ideax.model.entity.State;
+import rzd.vivc.ideax.model.pageobjeсt.StateInfoWithIdeaCount;
+import rzd.vivc.ideax.model.repository.IdeaRepository;
+import rzd.vivc.ideax.model.repository.StateRepository;
+import rzd.vivc.ideax.wicket.basepage.IdeaPage;
+import rzd.vivc.ideax.wicket.director.Input;
+import rzd.vivc.ideax.wicket.panels.DateLabel;
+
+/**
+ *
+ * @author vvolgina
+ */
+public final class Messenger extends IdeaPage {
+
+    //выбраное состояние идеи для сортировки
+    private StateInfoWithIdeaCount selectedState;
+    //все состояния
+    private List<StateInfoWithIdeaCount> states;
+    //список выводимых идей
+    private List<Idea> ideasRealList;
+
+    public Messenger() {
+        super();
+        //загрузка всего подряд из БД
+        states = new StateRepository().getStatesForDropDown();
+        selectedState = states.get(0);
+        ideasRealList = new IdeaRepository().getIdeas(selectedState == null ? new State(states.get(0).getId()) : new State(selectedState.getId()));
+
+        //выпадающий лист с состояниями
+        final WebMarkupContainer reload = new WebMarkupContainer("reload");
+        reload.setOutputMarkupId(true);
+        DropDownChoice dropDownChoice = new DropDownChoice("states", new PropertyModel(this,
+                "selectedState"), states) {
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
+            }
+        };
+        //обновление списка через ajax
+        dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget art) {
+                ///TODO по идее nuklpointer тут быть не дожен и проверку можно убрать
+                ideasRealList = new IdeaRepository().getIdeas(selectedState == null ? new State(states.get(0).getId()) : new State(selectedState.getId()));
+                art.add(reload);
+            }
+        });
+        add(dropDownChoice);
+        add(reload);
+      
+        //свписок идей
+        reload.add(new RefreshingView("ideas") {
+            @Override
+            protected Iterator getItemModels() {
+
+                return new ModelIteratorAdapter(ideasRealList.iterator()) {
+                    @Override
+                    protected IModel model(Object object) {
+                        return new Model<Idea>((Idea) object);
+                    }
+                };
+            }
+
+            @Override
+            protected void populateItem(Item item) {
+                Idea idea = (Idea) item.getModelObject();
+                BookmarkablePageLink comment;
+                //куда переходить при клике на идею
+                if (getUserSession().isDirector()) {
+                    comment = new BookmarkablePageLink("comment", Input.class, new PageParameters().add("id", idea.getId()));
+                } else {
+                    comment = new BookmarkablePageLink("comment", Recenzia.class, new PageParameters().add("id", idea.getId()));
+                }
+                item.add(comment);
+                //тема
+                comment.add(new Label("theme", idea.getTheme()));
+                //текст
+                comment.add(new MultiLineLabel("text", idea.getText()));
+                //ФИО
+                comment.add(new Label("fio", idea.getUserCreator().getFIO()));
+                //дата до которой выполнить
+                comment.add(new DateLabel("date", idea.getDt_end()));
+            }
+        });
+    }
+}

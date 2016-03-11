@@ -1,0 +1,29 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.logic.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Список строг. Есть дополнительный метод лдля вывода всего списка через запятую
+ * @author vvolgina
+ */
+public class StringListWithCommaSeparatedView{
+    private List<String> list;
+
+    public StringListWithCommaSeparatedView(List<String> list) {
+        this.list = list;
+    }
+
+    public String getCommaSeparatedValues(){
+        StringBuilder builder=new StringBuilder();
+        for (String string : list) {
+            builder.append(string).append(", ");
+        }
+        String res=builder.toString();
+        return res.length()>2?res.substring(0, res.length()-2):"";
+    }
+}

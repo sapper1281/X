@@ -1,0 +1,132 @@
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package rzd.vivc.ideax.model.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import rzd.vivc.ideax.model.configuration.SessionFactorySingleton;
+import rzd.vivc.ideax.model.entity.Idea;
+import rzd.vivc.ideax.model.entity.State;
+import rzd.vivc.ideax.model.entity.User;
+import rzd.vivc.ideax.model.entity.Action;
+import rzd.vivc.ideax.model.entity.State;
+/**
+ *
+ * @author apopovkin
+ */
+public final class IdeaRepository extends BaseRepository<Idea>{
+
+    /**
+     * Извлекает из БД идеи по признаку состояния .
+     *
+     * @param state состояние идеи
+     * @return список идей с
+     * @throws HibernateException ошибка связи с БД
+     */
+    public List<Idea> getIdeas(State state) throws HibernateException {
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        List<Idea> ideaList = (List<Idea>) sess.createQuery("SELECT I from Idea as I INNER JOIN I.state as s where s.id=I.state.id  and   s.id=:state and I.deleted=0").setLong("state", state.getId()).list();
+
+        t.commit();
+        sess.close();
+
+        return ideaList;
+    }
+
+   
+
+    /**
+     * Проверка обязательных полей
+     *
+     * @param idea идеи
+     *
+     */
+    public void saveCretery(Idea idea,Session sess) {
+        if (idea != null) {
+            if (idea.getState() != null) {
+                if (!idea.getTheme().equals("")) {
+                    if (!idea.getText().equals("")) {
+                        save(idea,sess);
+                    } else {
+                        System.out.println("Отсутствует состояние");
+                    }
+
+                } else {
+                    System.out.println("Отсутствует тема");
+                }
+            } else {
+                System.out.println("Отсутствует текст");
+            }
+        } else {
+            System.out.println("Отсутствует отсутствует объект идеи");
+        }
+    }
+
+    /**
+     * Добавление новой идеи со списком пользователей
+     * @param idea идеи
+     * @param ideaState состояние
+     * @param userList список пользователей
+     */
+    public void saveIdeaUserList(Idea idea, List<User> userList) {
+
+       Session sess= getSession();
+        
+        if (userList != null) {
+            saveCretery(idea,sess);
+            for (User user : userList) {
+                Action action=new Action();
+                action.setUser(user);
+                action.setIdea(idea);
+                action.setState(idea.getState());
+                (new ActionRepository()).save(action);
+            }
+        } else {
+            saveCretery(idea,sess);
+        }
+        closeSession(sess);
+
+    }
+    
+    
+    
+    
+    
+    
+public static void main(String[] args) throws Exception  {
+// Тест сохранения идеи + action
+/*State ideaState=(new StateRepository()).get(1);
+Idea idea =new Idea();
+idea.setText("gghghg1");
+idea.setTheme("gghghg1");
+idea.setState(ideaState);
+List<User> userList=new ArrayList<User>();
+User user1=(new UserRepository()).get(1);
+User user2=(new UserRepository()).get(2);
+userList.add(user1);
+userList.add(user2);
+(new IdeaRepository()).saveIdeaUserList(idea,userList);*/
+
+/*
+(new IdeaRepository()).getIdeas((new StateRepository()).get(1));
+    for (Idea idea : (new IdeaRepository()).getIdeas((new StateRepository()).get(1))) {
+        System.out.println(idea.getId());
+    }*/
+
+}
+
+
+
+}
+

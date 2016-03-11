@@ -1,0 +1,159 @@
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.model.repository;
+
+import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import rzd.vivc.ideax.logic.email.mail;
+import rzd.vivc.ideax.model.configuration.SessionFactorySingleton;
+import rzd.vivc.ideax.model.entity.Idea;
+import rzd.vivc.ideax.model.entity.User;
+import rzd.vivc.ideax.model.entity.Action;
+import rzd.vivc.ideax.model.entity.Comment;
+import rzd.vivc.ideax.model.entity.State;
+import rzd.vivc.ideax.model.pageobjeсt.IdeaWithComentsInfo;
+import rzd.vivc.ideax.model.pageobjeсt.converters.UserConverter;
+import rzd.vivc.ideax.model.pageobjeсt.UserInfoForList;
+
+/**
+ *
+ * @author apopovkin
+ */
+public final class IdeaRepository extends BaseRepository<Idea> {
+
+    /**
+     * Извлекает из БД идеи по признаку состояния .
+     *
+     * @param state состояние идеи
+     * @return список идей с
+     * @throws HibernateException ошибка связи с БД
+     */
+    public List<Idea> getIdeas(State state) throws HibernateException {
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        List<Idea> ideaList = (List<Idea>) sess.createQuery("SELECT I from Idea as I where I.state.id=:state and I.deleted=0").setLong("state", state.getId()).list();
+
+        t.commit();
+        sess.close();
+
+        return ideaList;
+    }
+
+    /**
+     * Проверка обязательных полей
+     *
+     * @param idea идеи
+     *
+     */
+    public void saveCretery(Idea idea, Session sess) {
+        if (idea != null) {
+            if (idea.getState() != null) {
+                if (!idea.getTheme().equals("")) {
+                    if (!idea.getText().equals("")) {
+                        save(idea, sess);
+                    } else {
+                        System.out.println("Отсутствует состояние");
+                    }
+
+                } else {
+                    System.out.println("Отсутствует тема");
+                }
+            } else {
+                System.out.println("Отсутствует текст");
+            }
+        } else {
+            System.out.println("Отсутствует отсутствует объект идеи");
+        }
+    }
+
+    /*
+     * Формирование письма
+     */
+    void mailGoIdea(Idea idea, User user) {
+
+        String host = "10.58.0.47";
+        String hostName = "mail.smtp.host";
+        String fromMailUser = "ix@serw.rzd";
+        String toMailUser = user.getEmail();
+        String subject = "Идея Х";
+        String content = "text/html; charset=windows-1251";
+        String text = "<h4> " + idea.getTheme() + ": </h4> " + idea.getText();
+        (new mail()).doMail(hostName, host, fromMailUser, toMailUser, subject, content, text);
+
+
+    }
+
+    /**
+     * Добавление новой идеи со списком пользователей
+     *
+     * @param idea идеи
+     * @param ideaState состояние
+     * @param userList список пользователей
+     */
+    public void saveIdeaUserList(Idea idea, List<User> userList) {
+
+        Session sess = getSession();
+
+        if (userList != null && !userList.isEmpty()) {
+            saveCretery(idea, sess);
+            for (User user : userList) {
+                Action action = new Action();
+                action.setUser(user = new UserRepository().get(user.getId()));
+                action.setIdea(idea);
+                action.setState(idea.getState());
+                action.setRequired(true);
+                (new ActionRepository()).save(action);
+
+
+                mailGoIdea(idea, user);
+
+
+            }
+        } else {
+            saveCretery(idea, sess);
+        }
+        closeSession(sess);
+
+    }
+
+    /**
+     * Добавление новой идеи со списком пользователей
+     *
+     * @param idea идеи
+     * @param ideaState состояние
+     * @param userList список пользователей
+     */
+    public void saveIdeaUserInfoList(Idea idea, List<UserInfoForList> userInfoList) {
+        saveIdeaUserList(idea, new UserConverter().convert(userInfoList));
+    }
+
+    /**
+     * Извлечь информацию об идее и комментарии к ней
+     *
+     * @param id Id идеи
+     * @return идея с коментариями
+     * @throws HibernateException
+     */
+    public IdeaWithComentsInfo getIdeaWithComents(long id) throws HibernateException {
+        Session sess = getSession();
+        IdeaWithComentsInfo idea = (IdeaWithComentsInfo) sess.createQuery("select new rzd.vivc.ideax.model.pageobjeсt.IdeaWithComentsInfo(i.theme, i.text, i.fileName, i.dt_end, i.id) from Idea as i WHERE i.id=:id").setLong("id", id).uniqueResult();
+        idea.setComments((List<Comment>) sess.createQuery("select c from Comment as c WHERE c.action.idea.id=:id").setLong("id", id).list());
+        closeSession(sess);
+        return idea;
+    }
+
+    public static void main(String[] args) {
+        IdeaRepository rep = new IdeaRepository();
+        IdeaWithComentsInfo ideaWithComents = rep.getIdeaWithComents(1);
+        System.out.println(ideaWithComents);
+
+    }
+}

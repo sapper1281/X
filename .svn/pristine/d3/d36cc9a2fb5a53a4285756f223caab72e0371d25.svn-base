@@ -1,0 +1,168 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.model.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import rzd.vivc.ideax.model.configuration.SessionFactorySingleton;
+import rzd.vivc.ideax.model.entity.Department;
+import rzd.vivc.ideax.model.entity.User;
+import rzd.vivc.ideax.model.entity.UserType;
+import rzd.vivc.ideax.model.pageobjeсt.UserInfoForList;
+
+/**
+ * Репозиторий для пользователя
+ *
+ * @author VVolgina
+ */
+public final class UserRepository extends BaseRepository<User> {
+
+    
+    
+    
+    /**
+     * Ввод в БД пользователя совместно с формированием записи в department
+     * 
+     * @param 
+     * @return Запись в БД 
+     * @throws HibernateException ошибка связи с БД
+     * 
+     */
+    
+    public void saveUser(String fio,String phone,String email,long userType,String departmentName ){
+        Session sess=getSession(); 
+        
+        /*ввод предприятия */
+        
+        Department usD=new Department();
+        usD.setName(departmentName);
+        (new DepartmentRepository()).save(usD);
+        
+        /*поиск типа пользователя*/
+        UserType usT=new UserType();
+        (new UserTypeRepository()).get(userType);
+        
+        /*ввод пользователя*/
+        User us = new User();
+        us.setDepartment(usD);
+        us.setUserType(usT);
+        us.setFIO(fio);
+        us.setPhone(phone);
+        us.setEmail(email);
+        (new UserRepository()).save(us);
+       
+        closeSession(sess);
+      }
+    
+    
+    
+    
+    /**
+     * Извлекает из БД пароль пользователя по его email.
+     *
+     * @param email email
+     * @return Пароль. Если пользователь с таким email не найден - вернет null
+     * @throws HibernateException ошибка связи с БД
+     */
+    public String getPasswordByEmail(String email) throws HibernateException {
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        String bd = (String) sess.createQuery("SELECT l.password FROM LoginInfo as l where l.user.email=:mail").setString("mail", email).uniqueResult();
+
+        t.commit();
+        sess.close();
+
+        return bd;
+    }
+
+    /**
+     * Извлечение из БД пользователей с нужным текстом в ФИО
+     *
+     * @param search поисковй параметр
+     * @return список пользователей с нужным текстом в ФИО
+     */
+    public List<User> getAllNonDeleted(String search) throws HibernateException {
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        List<User> bd = getAllNonDeleted(search, sess);
+
+        t.commit();
+        sess.close();
+
+        return bd;
+    }
+
+    /**
+     * Извлечение из БД всех пользователей с нужным текстом в ФИО
+     *
+     * @param search поисковый параметр
+     * @param sess сессия Хибернейт с открытой транзакцией
+     * @return список всех пользователей с нужным текстом в ФИО
+     */
+    protected List<User> getAllNonDeleted(String search, Session sess) throws HibernateException {
+        return (ArrayList<User>) sess.createQuery("select u from User as u where deleted=0 AND fio LIKE :s").setString("s", "%" + search + "%").list();
+    }
+
+    /**
+     * Извлечение из БД краткой информации о пользователях с нужным текстом в
+     * ФИО
+     *
+     * @param search поисковй параметр
+     * @return список пользователей с нужным текстом в ФИО
+     */
+    public List<UserInfoForList> getFilteredUserInfo(String search) throws HibernateException {
+        Session sess = getSession();
+
+        List<UserInfoForList> bd = getFilteredUserInfo(search, sess);
+
+        closeSession(sess);
+
+        return bd;
+    }
+
+    /**
+     * Извлечение из БД краткой информации о пользователях с нужным текстом в
+     * ФИО
+     *
+     * @param search поисковый параметр
+     * @param sess сессия Хибернейт с открытой транзакцией
+     * @return список всех пользователей с нужным текстом в ФИО
+     */
+    protected List<UserInfoForList> getFilteredUserInfo(String search, Session sess) throws HibernateException {
+        return (ArrayList<UserInfoForList>) sess.createQuery("select new rzd.vivc.ideax.model.pageobjeсt.UserInfoForList(u.FIO, u.department.name, u.id) from User as u where deleted=0 AND fio LIKE :s").setString("s", "%" + search + "%").list();
+    }
+    
+    /**
+     * Извлечение из БД краткой информации о пользователях
+
+     * @return список всех неудаленных пользователей
+     */
+    public List<UserInfoForList> getUserInfo() throws HibernateException {
+        Session sess = getSession();
+
+        List<UserInfoForList> bd = getUserInfo(sess);
+
+        closeSession(sess);
+
+        return bd;
+    }
+ 
+    /**
+     * Извлечение из БД краткой информации о пользователях
+     * @param sess сессия Хибернейт с открытой транзакцией
+     * @return список всех неудаленных пользователей
+     */
+    protected List<UserInfoForList> getUserInfo(Session sess) throws HibernateException {
+        return (ArrayList<UserInfoForList>) sess.createQuery("select new rzd.vivc.ideax.model.pageobjeсt.UserInfoForList(u.FIO, u.department.name, u.id) from User as u where deleted=0").list();
+    }
+}

@@ -1,0 +1,275 @@
+/* 
+    Document   : inputModalDialog
+    Created on : 02.07.2014, 14:32:10
+    Author     : apopovkin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*черный фон*/
+/*черный фон*/
+.modalDialog {
+    position: fixed;
+
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 99999;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    display: none;
+    pointer-events: none;
+   
+}
+
+.modalDialog:target {
+    display: block;
+    pointer-events: auto;
+}
+
+
+
+
+.form-container {
+   position: relative;
+   margin: 10% auto;
+   position: relative;
+    border: 1px solid #cccccc;
+    background: #008aff;
+    background: #fcefa1;
+    background: -webkit-gradient(linear, left top, right bottom, from(#beige), to(#eeeeee));
+    background: -webkit-linear-gradient(300deg, beige, #eeeeee);
+    background: -moz-linear-gradient(300deg,  beige, #eeeeee);
+    background: -ms-linear-gradient(300deg,  beige, #eeeeee);
+    background: -o-linear-gradient(300deg,  beige, #eeeeee);
+    background-image: -ms-linear-gradient(300deg, #beige 0%, #eeeeee 100%);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+    -moz-box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+    box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+    font-family: Verdana;
+    text-decoration: none;
+    vertical-align: middle;
+    padding:10px;
+    width:400px;
+    height:450px; 
+     
+}
+
+
+
+.close {
+    
+    background: beige;
+    color: #d1d1d1;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background:#d1d1d1 ;
+              }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#search input[type="text"] {
+    background: url(../img/search-dark.png) no-repeat 8px 7px #fcfcfc;
+    border: 1px solid #d1d1d1;
+    font: bold 12px Arial,Helvetica,Sans-serif;
+    color: #bebebe;
+    width: 150px;
+    padding: 6px 15px 6px 35px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    -webkit-transition: all 0.7s ease 0s;
+    -moz-transition: all 0.7s ease 0s;
+    -o-transition: all 0.7s ease 0s;
+    transition: all 0.7s ease 0s;
+    float: right;
+}
+
+#search input[type="text"]:focus {
+    width: 200px;
+}
+
+
+
+
+
+
+.zebra caption{
+    font-size:15px;
+    font-weight:normal;
+    background-repeat:no-repeat;
+    background-position: 10px left;
+    padding-top: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+
+
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width:100%;
+    -webkit-box-shadow:  0px 2px 1px 5px rgba(242, 242, 242, 0.1);
+    box-shadow:  0px 2px 1px 5px rgba(242, 242, 242, 0.1);
+
+}
+.zebradiv {
+    width:100%;
+    overflow-y: auto;
+
+    height: 290px;
+}
+
+
+.zebra {
+    border: 1px solid #555;
+
+}
+
+.zebra td {
+    border-left: 1px solid #555;
+    border-top: 1px solid #555;
+    padding: 5px;
+    text-align: left;   
+    font-size: 10px;
+}
+
+.zebra th, .zebra th:hover {
+    border-left: 1px solid #555;
+    border-bottom: 1px solid #828282;
+    padding: 5px;  
+    /*  background-color:#c98787 !important;
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#151515), to(#404040)) !important;
+      background-image: -webkit-linear-gradient(top, #151515, #404040) !important;
+      background-image:    -moz-linear-gradient(top, #151515, #404040) !important;
+      background-image:     -ms-linear-gradient(top, #151515, #404040) !important;
+      background-image:      -o-linear-gradient(top, #151515, #404040) !important;
+      background-image:         linear-gradient(top, #151515, #404040) !important;*/
+    color: #555 ;
+    font-weight:normal;
+    font-size: 12px;
+}
+
+
+.zebra tbody tr:nth-child(even) {
+    background: beige !important;
+    color:#555;
+}
+
+.zebra tr:hover *{
+    background: #eeeeee;
+    color:#c98787;
+}
+
+.zebra tr {
+    background:#eeeeee;
+    color:#555;
+}
+.form-recover  a {
+    font-size:13px;
+    color:#828282;
+    float: right;  
+    text-decoration:none; 
+    border-right:  1px solid #555;
+    border-bottom:  1px solid #555;
+    -webkit-box-shadow: rgba(255,255,255,0) 0 3px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0) 0 3px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0) 0 3px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background: beige;
+    padding: 3px;
+} 
+.form-recover  a:hover {
+    font-size:13px;
+    color:#828282;
+    float: right;  
+    text-decoration:none; 
+    border-top:   1px solid #555;
+    border-left:    1px solid #555;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background: #d1d1d1;
+    padding: 3px;
+} 
+
+.addPerson{
+    font-size: 10px; 
+    vertical-align: middle;
+    margin-top: 2px; 
+    color: #828282;
+
+}
+.addPersondiv{
+    width:100%;
+    overflow-y: auto;
+
+    height: 50px;
+
+}
+
+
+
+.checkbox{
+    color: #bebebe;
+    margin-top: 2px;
+    text-align: left;
+    font-size: 12px;
+
+} 
+.checkbox :hover{
+    color: #555;
+    margin-top: 2px;
+    text-align: left;
+    font-size: 12px;
+
+} 

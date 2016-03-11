@@ -1,0 +1,89 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.pages.forall;
+
+import java.util.List;
+import org.apache.wicket.Session;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.LoadableDetachableModel;
+import rzd.vivc.ideax.model.entity.Idea;
+import rzd.vivc.ideax.model.entity.State;
+import rzd.vivc.ideax.model.entity.User;
+import rzd.vivc.ideax.model.repository.IdeaRepository;
+import rzd.vivc.ideax.model.repository.UserRepository;
+import rzd.vivc.ideax.wicket.basepage.IdeaPage;
+import rzd.vivc.ideax.wicket.director.Input;
+
+/**
+ *
+ * @author vvolgina
+ */
+public final class Messenger extends IdeaPage {
+
+    //модель для загрузки списка идей
+    private class LoadableIdeasModel extends LoadableDetachableModel<List<Idea>> {
+
+        private Long stateId;
+        private transient List<Idea> ideas;
+
+        public LoadableIdeasModel(List<Idea> ideas) {
+            super(ideas);
+        }
+
+        public LoadableIdeasModel(Long stateId) {
+            this.stateId = stateId;
+        }
+
+        public LoadableIdeasModel() {
+        }
+
+        public Long getStateId() {
+            return stateId;
+        }
+
+        public void setStateId(Long stateId) {
+            this.stateId = stateId;
+        }
+
+        @Override
+        protected List<Idea> load() {
+            if (stateId == null) {
+                return new IdeaRepository().getAllNonDeleted();
+            }
+            return new IdeaRepository().getIdeas(new State(stateId));
+        }
+    }
+    LoadableIdeasModel ideasList = new LoadableIdeasModel();
+
+    public Messenger() {
+        super();
+        ListView ideas = new ListView("ideas", ideasList) {
+            @Override
+            protected void populateItem(ListItem li) {
+                Idea idea = (Idea) li.getModelObject();
+                BookmarkablePageLink comment;
+                if (getUserSession().isDirector()) {
+                    comment = new BookmarkablePageLink("comment", Input.class, new PageParameters().add("id", idea.getId()));
+                } else {
+                    comment = new BookmarkablePageLink("comment", Recenzia.class, new PageParameters().add("id", idea.getId()));
+                }
+                li.add(comment);
+                comment.add(new Label("theme", idea.getTheme()));
+                comment.add(new MultiLineLabel("text", idea.getText()));
+                comment.add(new Label("fio", idea.getUserCreator().getFIO()));
+                comment.add(new Label("date", idea.getDt_end()));
+            }
+        };
+        add(ideas);
+
+    }
+}

@@ -1,0 +1,176 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.pages.forall;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.DownloadLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.time.Duration;
+import rzd.vivc.ideax.logic.service.Constants;
+import rzd.vivc.ideax.logic.service.SaveErrorInfo;
+import rzd.vivc.ideax.logic.service.Upload;
+import rzd.vivc.ideax.model.entity.Action;
+import rzd.vivc.ideax.model.entity.Comment;
+import rzd.vivc.ideax.model.pageobjeсt.IdeaWithComentsInfo;
+import rzd.vivc.ideax.model.repository.ActionRepository;
+import rzd.vivc.ideax.model.repository.IdeaRepository;
+import rzd.vivc.ideax.model.repository.StateRepository;
+import rzd.vivc.ideax.wicket.basepage.IdeaPage;
+import rzd.vivc.ideax.wicket.panels.DateLabel;
+
+/**
+ * Странмца для ввода коменткриев на идею
+ *
+ * @author vvolgina
+ */
+public final class Recenzia extends IdeaPage {
+
+    //модель для загрузки данных по идее
+    private class LoadableIdeaWithComentsModel extends LoadableDetachableModel<IdeaWithComentsInfo> {
+
+        private long id;
+        private transient IdeaWithComentsInfo idea;
+
+        public long getId() {
+            return id;
+        }
+
+        public LoadableIdeaWithComentsModel(IdeaWithComentsInfo idea) {
+            super(idea);
+            this.id = idea.getId();
+        }
+
+        public LoadableIdeaWithComentsModel(long id) {
+            this.id = id;
+        }
+
+        @Override
+        protected IdeaWithComentsInfo load() {
+            if (id == 0) {
+                return new IdeaWithComentsInfo("", "", "", new Date(), id);
+            }
+            return new IdeaRepository().getIdeaWithComents(id);
+        }
+    }
+    private LoadableIdeaWithComentsModel idea;
+    private Comment newComment = new Comment();
+    //прикрепляемый к новому коментарию файл
+    private FileUploadField fileUpload;
+    private String fileName="";
+
+    public Recenzia(PageParameters params) {
+        long toLong = params.get("id").toLong(0);
+        idea = new LoadableIdeaWithComentsModel(toLong);
+        fileName=new IdeaRepository().get(toLong).getFileName();
+        add(new Label("theme", new PropertyModel(idea, "theme")));
+        add(new MultiLineLabel("text", new PropertyModel(idea, "text")));
+        boolean view=viewDownloadLink(fileName);
+        add(new DownloadLink("download", new AbstractReadOnlyModel<File>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public File getObject() {
+                File down=new File(Constants.UPLOAD_FOLDER
+                            + fileName);
+                return down;
+            }
+        }).setCacheDuration(Duration.NONE).setEnabled(view));
+        add(new DateLabel("data", new PropertyModel<Date>(idea, "dt_end")));
+        ListView<Comment> comments = new ListView<Comment>("comment", new PropertyModel<List<Comment>>(idea, "comments")) {
+            @Override
+            protected void populateItem(ListItem<Comment> li) {
+                Comment comment = li.getModelObject();
+                li.add(new Label("fio", comment.getAction().getUser().getFIO() + ": " + comment.getAction().getState().getName()));
+                li.add(new MultiLineLabel("commentText", comment.getText()));
+                li.add(new DateLabel("commentDate", comment.getDt_create()));
+            }
+        };
+        add(comments);
+        Form form = new Form("newComment");
+        add(form);
+        form.add(new TextArea("newText", new PropertyModel(newComment, "text")));
+        //Загрузка файла
+       // form.setMultiPart(true);
+       // form.add(fileUpload = new FileUploadField("fileUpload"));
+        SubmitLink yes = new SubmitLink("yes") {
+            @Override
+            public void onSubmit() {
+                super.onSubmit();
+                onSubmitForAll("Принятые");
+            }
+        };
+        SubmitLink no = new SubmitLink("no") {
+            @Override
+            public void onSubmit() {
+                super.onSubmit();
+                onSubmitForAll("Отклоненные");
+            }
+        };
+        SubmitLink arch = new SubmitLink("arch") {
+            @Override
+            public void onSubmit() {
+                super.onSubmit();
+                onSubmitForAll("Архив");
+            }
+        };
+        form.add(yes);
+        form.add(no);
+        form.add(arch);
+    }
+
+    private boolean viewDownloadLink(String fileName){
+        if(fileName==null||fileName.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+    
+    private void onSubmitForAll(String state) {
+
+
+        //загрузка файла
+      /*  final FileUpload uploadedFile = fileUpload.getFileUpload();
+         try {
+         String fileName = new Upload().doUpload(uploadedFile);
+         if (!fileName.isEmpty()) {
+         newComment.setFileName(fileName);
+         }
+         ///TODO вместо добавит пользвателей должен быть список этих пользователей
+         } catch (IllegalStateException e) {
+         new SaveErrorInfo().save(e);
+         error(e.getMessage());
+         }*/
+        //сохранение заметки в БД
+        Action findActionForIdeaAndUser = new ActionRepository().findActionForIdeaAndUser(idea.getId(), getUserSession().getUser().getId());
+        if (findActionForIdeaAndUser == null) {
+            findActionForIdeaAndUser = new Action();
+            findActionForIdeaAndUser.setIdeaID(idea.getId());
+            findActionForIdeaAndUser.setRequired(false);
+            findActionForIdeaAndUser.setUserID(getUserSession().getUser().getId());
+        }
+        findActionForIdeaAndUser.setState(new StateRepository().getStateByName(state));
+        newComment.setAction(findActionForIdeaAndUser);
+        new ActionRepository().saveCommentWithAction(newComment);
+        setResponsePage(Messenger.class);
+    }
+}

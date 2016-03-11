@@ -1,0 +1,145 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.model.repository;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import rzd.vivc.ideax.model.configuration.SessionFactorySingleton;
+import rzd.vivc.ideax.model.entity.Base.BaseEntity;
+
+/**
+ * Самые обычные сохранение/обновление, извлечение элемента по Id, всего списка
+ * элементов и списка неудаленных элементов. Наследуется всеми репоиториями для
+ * BaseEntity
+ *
+ * @author VVolgina
+ * @param <T> класс-наследник BaseEntity
+ */
+public abstract class BaseRepository<T extends BaseEntity> {
+
+    private final Class cl;
+
+    public BaseRepository() {
+        super();
+        cl = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    /**
+     * Сохранение/обновление в БД объекта класса-наследника Data_Info
+     *
+     * @param elem объект
+     */
+    public void save(T elem)  throws HibernateException{
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+        save(elem, sess);
+        t.commit();
+        sess.close();
+    }
+
+    /**
+     * Сохранение/обновление в БД объекта к
+     *
+     * @param elem объект
+     * @param sess сессия Хибернейт с открытой транзакцией
+     */
+    protected void save(T elem, Session sess)  throws HibernateException{
+        sess.saveOrUpdate(elem);
+    }
+
+    /**
+     * Извлечение из БД объекта по id
+     *
+     * @param id заданный id
+     * @return объект из БД с заданным id
+     */
+    public T get(long id)  throws HibernateException{
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        T bd = get(id, sess);
+
+        t.commit();
+        sess.close();
+
+        return bd;
+    }
+
+    /**
+     * Извлечение из БД объекта по id
+     *
+     * @param id заданный id
+     * @param sess сессия Хибернейт с открытой транзакцией
+     * @return объект из БД с заданным id
+     */
+    protected T get(long id, Session sess)  throws HibernateException{
+        return (T) sess.get(cl, id);
+    }
+
+    /**
+     * Извлечение из БД всех объектов данного класса
+     *
+     * @return список всех объектов
+     */
+    public List<T> getAll()  throws HibernateException{
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        List<T> bd = getAll(sess);
+
+        t.commit();
+        sess.close();
+
+        return bd;
+    }
+
+    /**
+     * Извлечение из БД всех объектов данного класса
+     *
+     * @param sess сессия Хибернейт с открытой транзакцией
+     * @return список всех объектов
+     */
+    protected List<T> getAll(Session sess)  throws HibernateException{
+        return (ArrayList<T>) sess.createQuery("from "
+                + cl.getName()).list();
+    }
+
+    /**
+     * Извлечение из БД всех неудаленных объектов данного класса
+     *
+     * @return список всех неудаленных объектов
+     */
+    public List<T> getAllNonDeleted()  throws HibernateException{
+        Session sess = SessionFactorySingleton.getSessionFactoryInstance()
+                .openSession();
+        Transaction t = sess.beginTransaction();
+
+        List<T> bd = getAllNonDeleted(sess);
+
+        t.commit();
+        sess.close();
+
+        return bd;
+    }
+
+    /**
+     * Извлечение из БД всех неудаленных объектов данного класса
+     *
+     * @param sess сессия Хибернейт с открытой транзакцией
+     * @return список всех неудаленных объектов
+     */
+    protected List<T> getAllNonDeleted(Session sess)  throws HibernateException{
+        return (ArrayList<T>) sess.createQuery("from "
+                + cl.getName()
+                + " where deleted=0").list();
+    }
+}

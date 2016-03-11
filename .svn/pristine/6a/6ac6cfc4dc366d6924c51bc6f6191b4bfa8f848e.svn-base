@@ -1,0 +1,127 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.startpage;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import rzd.vivc.ideax.logic.autorisation.Autentification;
+import rzd.vivc.ideax.logic.email.mail;
+import rzd.vivc.ideax.model.repository.UserRepository;
+import rzd.vivc.ideax.wicket.basepage.IdeaPage;
+import rzd.vivc.ideax.wicket.pages.forall.Messenger;
+
+/**
+ *
+ * @author vvolgina
+ */
+public class Login extends IdeaPage {
+
+    private String login;
+    private String password;
+    private String imail;
+    final WebMarkupContainer openLogin;
+    final WebMarkupContainer openRecover;
+
+    public Login() {
+        openLogin = new WebMarkupContainer("openLogin");
+        openLogin.setVisible(false);
+
+        openLogin.setOutputMarkupPlaceholderTag(true);
+        add(new VisibleInvisibleLink("openLoginLink", true, false));
+        add(openLogin);
+        //подключаем форму для восстановления пароля по email
+        Form form1 = new Form("fmail") {
+            @Override
+            public final void onSubmit() {
+                //попытка извлечь из БД пароль для пользователя с данным email. 
+                String passwordByEmail = (new UserRepository()).getPasswordByEmail(imail);
+                if (passwordByEmail != null) {
+                    ///TODO сделать нормальный переход после выполнения действия
+                    String text = "Вы воспользовались восстановлением пароля для системы Идея X. <br/> Ваш пароль: " + passwordByEmail;
+                    new mail().doMail("mail.smtp.host", "10.58.0.47", "ideax@serw.rzd", imail, "Восстановление пароля", "text/html; charset=windows-1251", text);
+                    info("Пароль был отправлен на вашу электронную почту");
+                } else {
+                    info("Адрес электронной почты введен неверно");
+                }
+            }
+        };
+        //поде для обратной связи о результатах восстановления пароля
+        add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form1)));
+
+        //подключаем форму Для ввода логина-пароля
+        Form form = new Form("logform") {
+            //при ее сабмите будет выполняться вход в систему
+            @Override
+            public final void onSubmit() {
+                //проверка логина/пароля
+                String signIn = new Autentification(login, password).signIn(getUserSession());
+                if (signIn.equals("access")) {
+                    //если есть такие - переход на страницу входа
+                    setResponsePage(Messenger.class);
+                } else {
+                    //иначе - ошибка
+                    ///TODO сделать возможным на одной странице выдавать разные сообщения
+                    setResponsePage(LoginE.class);
+                }
+            }
+        };
+
+        openLogin.add(form);
+        form.setModel(new CompoundPropertyModel(this));
+        form.add(new VisibleInvisibleLink("close1", false, false));
+        //Прнисобачиваем к форме поля для логина и пароля
+        form.add(new TextField("login").setRequired(true));
+
+        openRecover = new WebMarkupContainer("openRecover");
+        openRecover.setVisible(false);
+        openRecover.setOutputMarkupPlaceholderTag(true);
+
+        form.add(new VisibleInvisibleLink("openRecoverLink", false, true));
+
+        form.add(new PasswordTextField("password"));
+
+        add(openRecover);
+
+        openRecover.add(form1);
+
+        form1.setModel(new CompoundPropertyModel(this));
+        form1.add(new VisibleInvisibleLink("close2", false, false));
+        //Прнисобачиваем к форме поля для логина и пароля
+        form1.add(new TextField("imail").setRequired(true).add(EmailAddressValidator.getInstance()));
+        form1.add(new VisibleInvisibleLink("backToLoginLink", true, false));
+    }
+
+    private class VisibleInvisibleLink extends AjaxFallbackLink {
+
+        private boolean openLoginVisible;
+        private boolean openRecoverVisible;
+
+        public VisibleInvisibleLink(String id, boolean openLoginVisible, boolean openRecoverVisible) {
+            super(id);
+            this.openLoginVisible=openLoginVisible;
+            this.openRecoverVisible=openRecoverVisible; 
+        }
+
+        @Override
+        public void onClick(AjaxRequestTarget art) {
+             if (art != null) {
+                    openLogin.setVisible(openLoginVisible);
+                    openRecover.setVisible(openRecoverVisible);
+                    art.add(openLogin);
+                    art.add(openRecover);
+                }
+        }
+    }
+}

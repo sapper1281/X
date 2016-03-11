@@ -1,0 +1,152 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.model.entity;
+
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import rzd.vivc.ideax.model.entity.Base.BaseEntity;
+
+/**
+ * Объединяет идею, пользователя, пишущего к ней комментарии и установленное им
+ * состояние Также служет для указания, что пользователь обязательно должен
+ * оценить идею
+ *
+ * @author VVolgina
+ */
+@Entity
+@Table(name = "action")
+public class Action extends BaseEntity {
+
+    //<editor-fold defaultstate="collapsed" desc="поля">
+    private boolean required = false;
+    @JoinColumn(name = "user_id")
+    @ManyToOne
+    private User user;
+    @JoinColumn(name = "idea_id")
+    @ManyToOne
+    private Idea idea;
+    @JoinColumn(name = "state_id")
+    @ManyToOne
+    private State state;
+    //комментарии по данному событию
+    @OneToMany(mappedBy = "action")
+    private List<Comment> comments;
+    //</editor-fold>
+
+    public Action(long id) {
+        super(id);
+    }
+
+    public Action() {
+        super();
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="get-set">
+    /**
+     * Флаг того, что данный ползователь обязательно долен оценить идею
+     *
+     * @return Флаг того, что данный ползователь обязательно долен оценить идею
+     */
+    public boolean isRequired() {
+        return required;
+    }
+
+    /**
+     * Флаг того, что данный ползователь обязательно долен оценить идею
+     *
+     * @param required Флаг того, что данный ползователь обязательно долен
+     * оценить идею
+     */
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    /**
+     * Пользователь, который выпрлняет данное действие
+     *
+     * @return Пользователь, который выпрлняет данное действие
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * Пользователь, который выполняет данное действие
+     *
+     * @param user Пользователь, который выполняет данное действие
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * id пользователя, который выполняет данное действие
+     *
+     * @param id id пользователя, который выполняет данное действие
+     */
+    public void setUserID(long id) {
+        this.user = new User(id);
+    }
+
+    /**
+     * Идея, с которой выполняется действие
+     *
+     * @return Идея, с которой выполняется действие
+     */
+    public Idea getIdea() {
+        return idea;
+    }
+
+    /**
+     * Идея, с которой выполняется действие
+     *
+     * @param idea Идея, с которой выполняется действие
+     */
+    public void setIdea(Idea idea) {
+        this.idea = idea;
+    }
+
+    /**
+     * id идеи, с которой выполняется действие
+     *
+     * @param id id идеи, с которой выполняется действие
+     */
+    public void setIdeaID(long id) {
+        this.idea = new Idea(id);
+    }
+
+    /**
+     * Состояние, которое пользователь указал для идеи
+     *
+     * @return Состояние, которое пользователь указал для идеи
+     */
+    public State getState() {
+        return state;
+    }
+
+    /**
+     * Состояние, которое пользователь указал для идеи
+     *
+     * @param state Состояние, которое пользователь указал для идеи
+     */
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    /**
+     * id состояния, которое пользователь указал для идеи
+     *
+     * @param id id состояния, которое пользователь указал для идеи
+     */
+     public void setStateID(long id) {
+        this.state = new State(id);
+    }
+     //</editor-fold>
+}

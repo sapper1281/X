@@ -1,0 +1,23 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.pages.forall;
+
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.markup.html.WebPage;
+
+/**
+ *
+ * @author vvolgina
+ */
+public final class Recenzia extends WebPage {
+
+    public Recenzia() {
+        super();
+    }
+    
+    public Recenzia(PageParameters params) {
+        //TODO:  process page parameters
+    }
+}

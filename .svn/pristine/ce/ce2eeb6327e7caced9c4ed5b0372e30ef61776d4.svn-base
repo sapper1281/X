@@ -1,0 +1,78 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.startpage;
+
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import rzd.vivc.ideax.logic.autorisation.Autentification;
+import rzd.vivc.ideax.logic.email.mail;
+import rzd.vivc.ideax.model.repository.UserRepository;
+import rzd.vivc.ideax.wicket.basepage.IdeaPage;
+import rzd.vivc.ideax.wicket.director.Input;
+
+/**
+ *
+ * @author vvolgina
+ */
+public class Login extends IdeaPage {
+
+    private String login;
+    private String password;
+    private String imail;
+
+    public Login() {
+        //подключаем форму Для ввода логина-пароля
+        Form form = new Form("logform") {
+            //при ее сабмите будет выполняться вход в систему
+            @Override
+            public final void onSubmit() {
+                //проверка логина/пароля
+                String signIn = new Autentification(login, password).signIn(getUserSession());
+                if (signIn.equals("access")) {
+                    //если есть такие - переход на страницу входа
+                    setResponsePage(Input.class);
+                } else {
+                    //иначе - ошибка
+                    ///TODO сделать возможным на одной странице выдавать разные сообщения
+                    setResponsePage(LoginE.class);
+                }
+            }
+        };
+        add(form);
+        form.setModel(new CompoundPropertyModel(this));
+        //Прнисобачиваем к форме поля для логина и пароля
+        form.add(new TextField("login").setRequired(true));
+        form.add(new PasswordTextField("password"));
+
+        //подключаем форму для восстановления пароля по email
+        form = new Form("fmail") {
+            @Override
+            public final void onSubmit() {
+                //попытка извлечь из БД пароль для пользователя с данным email. 
+                String passwordByEmail = (new UserRepository()).getPasswordByEmail(imail);
+                if (passwordByEmail != null) {
+                    ///TODO сделать нормальный переход после выполнения действия
+                    String text="Вы воспользовались восстановлением пароля для системы Идея X. <br/> Ваш пароль: "+passwordByEmail;
+                    new mail().doMail("mail.smtp.host", "10.58.0.47", "ideax@serw.rzd", imail, "Восстановление пароля", "text/html; charset=windows-1251", text);
+                    info("Пароль был отправлен на вашу электронную почту");
+                } else{
+                     info("Адрес электронной почты введен неверно");
+                }
+            }
+        };
+        add(form);
+        //поде для обратной связи о результатах восстановления пароля
+        form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
+        form.setModel(new CompoundPropertyModel(this));
+        //Прнисобачиваем к форме поля для логина и пароля
+        form.add(new TextField("imail").setRequired(true).add(EmailAddressValidator.getInstance()));
+    }
+}

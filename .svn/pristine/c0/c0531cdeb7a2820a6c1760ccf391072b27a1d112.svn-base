@@ -1,0 +1,28 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.model.pageobjeсt;
+
+import java.util.ArrayList;
+import java.util.List;
+import rzd.vivc.ideax.model.entity.User;
+
+/**
+ * Преобразует краткую информацию в объекты БД
+ * @author vvolgina
+ */
+public class UserConverter {
+    /**
+     * Создает на основе списка информации список пользователей с соответствующими Id
+     * @param infos список информации
+     * @return список полдьзователей
+     */
+    public List<User> convert(List<UserInfoForList> infos){
+        List<User> res=new ArrayList<>();
+        for (UserInfoForList userInfo : infos) {
+            res.add(new User(userInfo.getId()));
+        }
+        return res;
+    }
+}

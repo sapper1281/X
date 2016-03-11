@@ -1,0 +1,233 @@
+/* 
+    Document   : logocss
+    Created on : 18.06.2014, 11:48:06
+    Author     : apopovkin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+.form-container-recover{
+   border: 1px solid #cccccc;
+   background: beige;
+   background: -webkit-gradient(linear, left top, left bottom, from(beige), to(#bbb8bf));
+   background: -webkit-linear-gradient(270deg, beige,#bbb8bf );
+   background: -moz-linear-gradient(270deg, beige, #bbb8bf);
+   background: -ms-linear-gradient(270deg, beige, #bbb8bf);
+   background: -o-linear-gradient(270deg, beige, #bbb8bf);
+   background-image: -ms-linear-gradient(270deg, beige 0%, #bbb8bf 100%);
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   -webkit-box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+   -moz-box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+   box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+   font-family: Verdana;
+   text-decoration: none;
+   vertical-align: middle;
+   padding:10px;
+   padding:10px;
+   width:300px;
+   height:150px; 
+}
+
+
+.form-container-recover h2 {
+   text-shadow: #bec3cc 0 1px 0;
+   font-size:18px;
+   margin: 0 0 10px 0;
+   font-weight:bold;
+   text-align:center;
+    }
+.form-container {
+   border: 1px solid #cccccc;
+   background: beige;
+   background: -webkit-gradient(linear, left top, left bottom, from(beige), to(#bbb8bf));
+   background: -webkit-linear-gradient(270deg, beige,#bbb8bf );
+   background: -moz-linear-gradient(270deg, beige, #bbb8bf);
+   background: -ms-linear-gradient(270deg, beige, #bbb8bf);
+   background: -o-linear-gradient(270deg, beige, #bbb8bf);
+   background-image: -ms-linear-gradient(270deg, beige 0%, #bbb8bf 100%);
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   -webkit-box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+   -moz-box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+   box-shadow: rgba(000,000,000,0.9)1px 0px 5px, inset rgba(255,255,255,0.4) 0 0px 0;
+   font-family: Verdana;
+   text-decoration: none;
+   vertical-align: middle;
+   padding:10px;
+   width:300px;
+   height:220px;
+   }
+.form-field {
+   border: 1px solid #b2a2c7;
+   background: #ffffff;
+   -webkit-border-radius: 4px;
+   -moz-border-radius: 4px;
+   border-radius: 4px;
+   color: #5f6e7a;
+   -webkit-box-shadow: rgba(000,000,000,0.4)0 0 0, inset rgba(000,000,000,0.7) 0 0 0;
+   -moz-box-shadow: rgba(000,000,000,0.4)0 0 0, inset rgba(000,000,000,0.7) 0 0 0;
+   box-shadow: rgba(000,000,000,0.4)0 0 0, inset rgba(000,000,000,0.7) 0 0 0;
+   padding:3px;
+   margin-bottom:20px;
+   width:94%;
+   }
+.form-field:focus {
+   background: cornsilk;
+   color: #858585;
+   }
+.form-container h2 {
+   text-shadow: #bec3cc 0 1px 0;
+   font-size:18px;
+   margin: 0 0 10px 0;
+   font-weight:bold;
+   text-align:center;
+    }
+.form-title {
+   margin-bottom:3px;
+   color: #c44848;
+   text-shadow: #000000 0 1px 0;
+   }
+   .form-recover a  {
+       font-size:10px;
+      margin-bottom:3px;
+   color: #606061;
+    float: right;  
+   text-decoration:none;  
+   } 
+   
+   .form-recover a:hover
+    {
+       font-size:12px;
+      margin-bottom:3px;
+   color: #c98787;
+   text-shadow: #000000 0 1px 0; 
+     float: right;  
+       
+   } 
+   
+.submit-container {
+   margin:3px 0;
+   text-align:right;
+   }
+.submit-button {
+    width: 100px;
+    height: 30px;
+   border: 1px solid #8c8c8c;
+   background: #858585;
+   background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#858585));
+   background: -webkit-linear-gradient(top, #ffffff, #858585);
+   background: -moz-linear-gradient(top, #ffffff, #858585);
+   background: -ms-linear-gradient(top, #ffffff, #858585);
+   background: -o-linear-gradient(top, #ffffff, #858585);
+   background-image: -ms-linear-gradient(top, #ffffff 0%, #858585 100%);
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   -webkit-box-shadow: rgba(000,000,000,0.5) 1px 1px 1px, inset rgba(000,000,000,0.5) 0 0 0;
+   -moz-box-shadow: rgba(000,000,000,0.5) 1px 1px 1px, inset rgba(000,000,000,0.5) 0 0 0;
+   box-shadow: rgba(000,000,000,0.5) 1px 1px 1px, inset rgba(000,000,000,0.5) 0 0 0;
+   text-shadow: #bfe4eb 0 1px 0;
+   color: #c44848;
+   font-family: helvetica, serif;
+   padding: 3px 5px;
+   font-size: 14px;
+   text-shadow: #000000 0 1px 0;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+.submit-button:hover {
+   border: 1px solid #83aecf;
+   text-shadow: #ebe6eb 0 1px 0;
+   background: #b5b5b5;
+   background: -webkit-gradient(linear, left top, left bottom, from(#acabad), to(#b5b5b5));
+   background: -webkit-linear-gradient(top, #acabad, #b5b5b5);
+   background: -moz-linear-gradient(top, #acabad, #b5b5b5);
+   background: -ms-linear-gradient(top, #acabad, #b5b5b5);
+   background: -o-linear-gradient(top, #acabad, #b5b5b5);
+   background-image: -ms-linear-gradient(top, #acabad 0%, #b5b5b5 100%);
+   color: #c44848;
+   }
+.submit-button:active {
+   text-shadow: #dad3e3 0 1px 0;
+   border: 1px solid #83aecf;
+   background: #b2adb8;
+   background: -webkit-gradient(linear, left top, left bottom, from(#bbb8bf), to(#b5b5b5));
+   background: -webkit-linear-gradient(top, #bbb8bf, #b2adb8);
+   background: -moz-linear-gradient(top, #bbb8bf, #b2adb8);
+   background: -ms-linear-gradient(top, #bbb8bf, #b2adb8);
+   background: -o-linear-gradient(top, #bbb8bf, #b2adb8);
+   background-image: -ms-linear-gradient(top, #bbb8bf 0%, #b2adb8 100%);
+   color: #fff;
+   }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+.modalDialog {
+     position: fixed;
+
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.4);
+	z-index: 99999;
+	-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 400ms ease-in;
+	display: none;
+	pointer-events: none;
+        
+}   
+   
+
+.modalDialog:target {
+	display: block;
+	pointer-events: auto;
+}
+
+.modalDialog  > form {
+	
+	position: relative;
+	margin: 10% auto;
+	
+	
+}
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	-moz-box-shadow: 1px 1px 3px #000;
+	-webkit-box-shadow: 1px 1px 3px #000;
+	box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #b2adb8; }

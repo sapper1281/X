@@ -1,0 +1,93 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.model.entity;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import rzd.vivc.ideax.model.entity.Base.BaseEntity;
+
+/**
+ *Подразделения
+ * @author VVolgina
+ */
+@Entity
+@Table(name = "Department")
+public class Department extends BaseEntity implements Serializable{
+
+    //<editor-fold defaultstate="collapsed" desc="поля">
+    private String name;
+    private long idParent;
+    @OneToMany(mappedBy = "department")
+    private List<User> users;
+    //</editor-fold>
+
+    public Department(long id) {
+        super(id);
+    }
+
+    public Department() {
+        super();
+    }
+
+        //<editor-fold defaultstate="collapsed" desc="get-set">
+    /**
+     * Название
+     *
+     * @return Название
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Название
+     *
+     * @param name Название
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * id подразделенитя-родителя
+     * @return  id подразделенитя-родителя
+     */
+    public long getIdParent() {
+        return idParent;
+    }
+
+    /**
+     * id  подразделенитя-родителя
+     * @param idParent id  подразделенитя-родителя
+     */
+    public void setIdParent(long idParent) {
+        this.idParent = idParent;
+    }
+    
+    /**
+     * Пользоватли из данного подразделения
+     * @return Пользоватли из данного подразделения
+     */
+    public List<User> getUsers() {
+        return Collections.unmodifiableList(users);
+    }
+
+    /**
+     * Пользоватли из данного подразделения
+     * @param users Пользоватли из данного подразделения
+     */
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+ //</editor-fold>
+
+  
+
+}

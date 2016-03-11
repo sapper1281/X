@@ -1,0 +1,156 @@
+/* 
+    Document   : recenziacss
+    Created on : 03.07.2014, 15:14:20
+    Author     : apopovkin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+
+.rec { 
+   
+    color:#474747;
+    font-size: 18px;
+     float: left;
+     width: 50%;
+}
+
+.rec1 {
+    
+   text-align:right; 
+   
+   
+}
+.rec1 a{ 
+    color:#A8A49D;
+    font-size: 18px;
+}
+
+.rec2{
+   
+    border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: #828282;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;
+    
+    
+} 
+
+.rec2 strong {
+    text-decoration:none; 
+	border-bottom:1px solid #ccc;
+	margin:10px 0;
+	display:block;
+	padding:0 0 5px;
+	font-size:17px;
+        color:indianred;
+}
+.rec2 .meta{
+    text-decoration:none; 
+	text-align:right;
+	color:#A50031;
+	font-style:italic;
+}
+.rec2 .imgholder {
+	
+	color:#777;
+}
+.rec2 p {
+	
+	color:#008000;
+}
+
+
+.rec2  textarea{
+   
+     border: 2px solid #c9b7a2;
+    background:  beige;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: #828282;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;
+  width: 95%;
+  height: 200px;
+  
+} 
+.rec3{
+    
+    
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    color: #828282;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    padding:8px;
+    margin-bottom:2px;
+  
+    
+    
+}
+.rec4{float:left;}
+.rec4 a{
+    margin-top: 15px;
+    font-size: 14px;
+    text-decoration:none; 
+    
+   
+    color:#c98787;
+}
+.rec5{text-align: right;}
+.a1{ text-decoration:none;
+    
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+      background:  beige;
+-webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    margin-left: 5px;
+    border: 2px solid #c9b7a2;
+    padding: 3px;
+    color:#5ca934;
+    }
+.a2{ text-decoration:none;
+    
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+      background:  beige;
+-webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    margin-left: 5px;
+    border: 2px solid #c9b7a2;
+    padding: 3px;
+    color:#c98787;
+    }
+    .a3{ text-decoration:none;
+    
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+      background:  beige;
+-webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
+    margin-left: 5px;
+    border: 2px solid #c9b7a2;
+    padding: 3px;
+    color:#35BFFF;
+    }

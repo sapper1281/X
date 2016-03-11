@@ -1,0 +1,225 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rzd.vivc.ideax.wicket.director;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import rzd.vivc.ideax.logic.service.SaveErrorInfo;
+import rzd.vivc.ideax.logic.service.Upload;
+import rzd.vivc.ideax.model.entity.Idea;
+import rzd.vivc.ideax.model.pageobjeсt.UserInfoForList;
+import rzd.vivc.ideax.model.repository.IdeaRepository;
+import rzd.vivc.ideax.model.repository.UserRepository;
+import rzd.vivc.ideax.wicket.basepage.ProtectedPage;
+import rzd.vivc.ideax.wicket.pages.forall.Messenger;
+
+/**
+ * Страница для ввода и редактирования заметок
+ *
+ * @author vvolgina
+ */
+public class Input extends ProtectedPage {
+
+    //модель для загрузки данных по идее
+    private class LoadableIdeaModel extends LoadableDetachableModel<Idea> {
+
+        private long id;
+        private transient Idea idea;
+
+        public LoadableIdeaModel(Idea idea) {
+            super(idea);
+            this.id = idea.getId();
+        }
+
+        public LoadableIdeaModel(long id) {
+            this.id = id;
+        }
+
+        @Override
+        protected Idea load() {
+            if (id == 0) {
+                return new Idea();
+            }
+            return new IdeaRepository().get(id);
+        }
+    }
+
+    //модель для загрузки списка пользователей
+    private class LoadableUsersModel extends LoadableDetachableModel<List<UserInfoForList>> {
+
+        private String search = "";
+        private transient List<UserInfoForList> usersL;
+
+        public LoadableUsersModel(List<UserInfoForList> usersI) {
+            super(usersI);
+        }
+
+        public LoadableUsersModel(String search) {
+            this.search = search;
+        }
+
+        public LoadableUsersModel() {
+        }
+
+        public void setSearch(String search) {
+            this.search = search;
+        }
+
+        @Override
+        protected List<UserInfoForList> load() {
+            if (search.isEmpty()) {
+                return new UserRepository().getUserInfo();
+            }
+            return new UserRepository().getFilteredUserInfo(search);
+        }
+    }
+    
+    //id редактируемой идеи. если 0, то идея новая
+    private long id=0;
+    //редактируемая идея
+    private LoadableIdeaModel ideaModel;
+    //общий список пользователей
+    private LoadableUsersModel users = new LoadableUsersModel();
+    //пользователи, выбранные для отклика на идею
+    List<UserInfoForList> selectedUsers = new ArrayList<>();
+    //запрос для сортировки пользователей
+    TextField inputSearch;
+    String isearch;
+    //прикрепляемый к идее файл
+    FileUploadField fileUpload;
+    //флаг разрешения на общий доступ к идеям
+    private boolean allowAll = false;
+
+    public Input(PageParameters param) {
+        //извлекаем Id идеи И ее загрузка
+        id = param.get("id").toLong(0);
+        ideaModel = new LoadableIdeaModel(id);
+
+        //форма с вводом заметки
+        Form form;
+        form = new Form("finput") {
+            @Override
+            public final void onSubmit() {
+                Idea idea = (Idea) ideaModel.getObject();
+                idea.setUserCreatorID(getUserSession().getUser().getId());
+                idea.setAccess((byte) (allowAll ? 0 : 1));
+                idea.setDt_begin(idea.getDt_create());
+
+                //загрузка файла
+                final FileUpload uploadedFile = fileUpload.getFileUpload();
+                try {
+                    String fileName = new Upload().doUpload(uploadedFile);
+                    if (!fileName.isEmpty()) {
+                        idea.setFileName(fileName);
+                    }
+                } catch (IllegalStateException e) {
+                    new SaveErrorInfo().save(e);
+                    error(e.getMessage());
+                }
+
+                //сохранение заметки в БД
+                try {
+                    new IdeaRepository().saveIdeaUserInfoList(idea, selectedUsers);
+                    setResponsePage(Messenger.class);
+                } catch (Exception e) {
+                    new SaveErrorInfo().save(e);
+                    error("Ошибка связи с БД" + e.getMessage());
+                }
+            }
+        };
+        add(form);
+        //поkе для обратной связи о результатах сохранения заметки
+        form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
+        //тема заметки
+        form.add(
+                new TextField("theme", new PropertyModel(ideaModel, "theme")));
+        //дата до которой выполнить
+        form.add(
+                new TextField("date", new PropertyModel(ideaModel, "dt_end"), Date.class));
+        //текст заметки
+        form.add(
+                new TextArea("text", new PropertyModel(ideaModel, "text")));
+        //Загрузка файла
+        form.setMultiPart(true);
+        form.add(fileUpload = new FileUploadField("fileUpload"));
+
+
+        //Окно добавления пользователей
+        final Form fsearch = new Form("fsearch");
+        add(fsearch);
+        //часть страницы с отсортированным списком пользователей
+        final WebMarkupContainer searchPart = new WebMarkupContainer("search");
+        //поле для поиска
+        inputSearch = new TextField("isearch", new PropertyModel(this, "isearch"));
+        inputSearch.setOutputMarkupId(true);
+        fsearch.add(inputSearch);
+        //при нажатии будеи осущствлен поиск
+        fsearch.add(new AjaxSubmitLink("dosearch") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget art, Form form) {
+                super.onSubmit(art, form);
+                Object modelObject = inputSearch.getModelObject();
+                users.setSearch((String) modelObject);
+                art.add(searchPart);
+            }
+        });
+        fsearch.add(searchPart);
+        searchPart.setOutputMarkupId(true);
+        //собственно общий список пользователей
+        ListView lv1;
+        //список выбранных пользователей
+        final WebMarkupContainer selected = new WebMarkupContainer("selected");
+        //собственно общий список пользователей
+        lv1 = new ListView("users", users) {
+            @Override
+            protected void populateItem(ListItem li) {
+                final UserInfoForList usr = (UserInfoForList) li.getModelObject();
+                li.add(new AjaxFallbackLink("fiolink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget art) {
+                        if (!selectedUsers.contains(usr)) {
+                            selectedUsers.add(usr);
+                            art.add(selected);
+                        }
+                    }
+                }.add(new Label("fio", usr.getFIO())));
+                li.add(new Label("department", ((UserInfoForList) li.getModelObject()).getDeartmentName()));
+            }
+        };
+        searchPart.add(lv1);
+        selected.setOutputMarkupId(true);
+        fsearch.add(selected);
+        //список выбранных пользователей
+        ListView lv2 = new ListView("selectedusers", selectedUsers) {
+            @Override
+            protected void populateItem(ListItem li) {
+                li.add(new Label("selecteduser", ((UserInfoForList) li.getModelObject()).getFIO()));
+            }
+        };
+        selected.add(lv2);
+        //гадочка для открытия общего доступа
+        fsearch.add(new CheckBox("allowall", new PropertyModel(this, "allowAll")));
+    }
+}
